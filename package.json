@@ -1,0 +1,17 @@
+{
+  "name": "@instago/sharepoint",
+  "version": "1.0.0",
+  "description": "Module sharepoint",
+  "main": "index.js",
+  "type": "commonjs",
+  "license": "SEE LICENSE IN LICENSE",
+  "keywords": [
+    "instago",
+    "sharepoint"
+  ],
+  "files": [
+    "index.js",
+    "ReadMe.MD",
+    "LICENSE"
+  ]
+}
