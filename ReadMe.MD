@@ -1,23 +1,41 @@
-# @instago/sharepoint
+module/sharepoint - V8 module
 
-Upload files to SharePoint/OneDrive via Microsoft Graph and append rows to Excel tables. Handy for saving mail attachments (and their AI-parsed JSON) into a document library.
+Move files and invoice data into SharePoint or OneDrive with a small, workflow-friendly helper. It is designed for common automation tasks like archiving mail attachments and keeping a structured trail of extracted invoice data.
 
-- Version: 1.0.0
-- Entry: index.js
-- Exports: `{ uploadSmall, saveInvoices, ensureAccessToken, excelAppendRow }`
-- Dependencies: `graph@1.0.0`, `b64@1.0.0`, `json@1.0.0`, `path@1.0.0`, `fmt@1.0.0`, `sys.storage.get`, `sys.http.fetch`
-- Auth: via Graph (`accessToken` or refresh/client credentials)
+Learn more about Instago at https://instago.ai.
 
-## API
-- `uploadSmall({ siteId, driveId, drivePath?, filename, path?, dataBase64?, accessToken, contentType?, workflow? })` – simple upload (<4MB recommended).
-- `saveInvoices({ attachments, aiResults?, sp: { siteId, driveId, drivePath?, jsonSubdir? }, auth, workflow? })` – upload PDF attachments and optional AI JSON to SharePoint.
-- `excelAppendRow({ driveId, itemId|path|link, table, values|row, auth, debug? })` – append a row to an Excel table.
-- `ensureAccessToken(auth)` – resolve an access token using Graph helper and optional stored tokens.
+## Technical reference
 
-## Example
+Exports:
+- `uploadSmall`
+- `saveInvoices`
+- `ensureAccessToken`
+- `excelAppendRow`
+
+Usage:
+- `uploadSmall({ siteId, driveId, drivePath?, filename, path?, dataBase64?, accessToken, contentType? })`
+  - Uploads a small file (simple upload). Provide either `path` or `dataBase64`.
+- `saveInvoices({ attachments, aiResults?, sp: { siteId, driveId, drivePath?, jsonSubdir? }, auth, workflow? })`
+  - Uploads PDF attachments and optional AI JSON into SharePoint, returning `{ ok, data, error }`.
+- `ensureAccessToken(auth)`
+  - Resolves an access token from `auth` or stored tokens. Accepts `accessToken`, or `refreshToken` plus client details.
+- `excelAppendRow({ driveId, itemId?, path?, link?, table, values?, row?, auth, debug? })`
+  - Appends a row to an Excel table. `values` is an array row; `row` can map by column name or letter.
+
+Configuration:
+- No required or optional `env` keys are defined in `env.json`.
+- Pass credentials and target IDs via function arguments.
+
+Examples:
 ```js
-const sp = require('sharepoint@1.0.0');
-const token = await sp.ensureAccessToken({ refreshToken, clientId, clientSecret, tenant: 'common' });
+const sp = require('sharepoint@latest');
+
+const token = await sp.ensureAccessToken({
+  refreshToken,
+  clientId,
+  clientSecret,
+  tenant: 'common'
+});
 
 await sp.uploadSmall({
   siteId: 'site-id',
@@ -25,10 +43,19 @@ await sp.uploadSmall({
   drivePath: 'Invoices',
   filename: 'invoice.pdf',
   path: 'mail/123/invoice.pdf',
-  accessToken: token
+  accessToken: token,
+  contentType: 'application/pdf'
 });
 ```
 
-## Notes
-- Requires Graph permissions to write to the target drive/site.
-- Uses module storage for reading data to upload and optionally persisting tokens/JSON; pass `workflow: true` to opt out.
+```js
+const sp = require('sharepoint@latest');
+
+await sp.excelAppendRow({
+  driveId: 'drive-id',
+  path: '/Documents/Book.xlsx',
+  table: 'Table1',
+  row: { A: '2024-01-01', B: 'Acme', C: '120.00' },
+  auth: { accessToken }
+});
+```

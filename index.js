@@ -2,12 +2,12 @@
 // Upload files to SharePoint/OneDrive via Microsoft Graph
 
 (function () {
-  const b64 = require('b64@1.0.0');
-  const j = require('json@1.0.0');
-  const pathx = require('path@1.0.0');
-  const fmt = require('fmt@1.0.0');
-  const graph = require('graph@1.0.0');
-  const log = require('log@1.0.0').create('sharepoint');
+  const b64 = require('b64@latest');
+  const j = require('json@latest');
+  const pathx = require('path@latest');
+  const fmt = require('fmt@latest');
+  const graph = require('graph@latest');
+  const log = require('log@latest').create('sharepoint');
   const GRAPH = 'https://graph.microsoft.com/v1.0';
 
   // --- utils ---
@@ -241,7 +241,7 @@
       if (!itemId && !filePath && typeof opts.link === 'string' && opts.link) {
         try {
           const info = await (async function resolveByLink(link){
-            const b64mod = require('b64@1.0.0');
+            const b64mod = require('b64@latest');
             const shareId = 'u!' + b64mod.b64urlFromUtf8(String(link||''));
             const url = `${GRAPH}/shares/${encodeURIComponent(shareId)}/driveItem?$select=id,name,parentReference,webUrl`;
             const r = await sys.http.fetch({ url, method: 'GET', headers: { 'Authorization': 'Bearer ' + token } });

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>sharepoint Documentation</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 48px 24px;
+        font-family: Arial, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: 28px;
+      }
+      .intro {
+        font-size: 16px;
+        color: #e2e8f0;
+      }
+      p {
+        margin: 0 0 16px;
+        color: #cbd5f5;
+      }
+      ul {
+        margin: 12px 0 0;
+        padding-left: 18px;
+      }
+      a {
+        color: #93c5fd;
+      }
+      .section {
+        margin-top: 28px;
+      }
+      .muted {
+        color: #94a3b8;
+        font-size: 14px;
+        margin: 6px 0 0;
+      }
+      .code {
+        background: #0b1220;
+        border: 1px solid #1e293b;
+        border-radius: 10px;
+        padding: 16px;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: 13px;
+        line-height: 1.5;
+        color: #e2e8f0;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>module/sharepoint - V8 module</h1>
+      <p class="intro">module/sharepoint - V8 module</p>
+      <p class="muted">Learn more at <a href="https://instago.ai" target="_blank" rel="noopener">https://instago.ai</a>.</p>
+      <div class="section">
+        <h2>Technical reference</h2>
+        <p>module/sharepoint - V8 module</p>
+<p>Move files and invoice data into SharePoint or OneDrive with a small, workflow-friendly helper. It is designed for common automation tasks like archiving mail attachments and keeping a structured trail of extracted invoice data.</p>
+<p>Learn more about Instago at https://instago.ai.</p>
+<h2>Technical reference</h2>
+<p>Exports:</p>
+<ul>
+<li><code>uploadSmall</code></li>
+<li><code>saveInvoices</code></li>
+<li><code>ensureAccessToken</code></li>
+<li><code>excelAppendRow</code></li>
+</ul>
+<p>Usage:</p>
+<ul>
+<li><code>uploadSmall({ siteId, driveId, drivePath?, filename, path?, dataBase64?, accessToken, contentType? })</code></li>
+<li>Uploads a small file (simple upload). Provide either <code>path</code> or <code>dataBase64</code>.</li>
+<li><code>saveInvoices({ attachments, aiResults?, sp: { siteId, driveId, drivePath?, jsonSubdir? }, auth, workflow? })</code></li>
+<li>Uploads PDF attachments and optional AI JSON into SharePoint, returning <code>{ ok, data, error }</code>.</li>
+<li><code>ensureAccessToken(auth)</code></li>
+<li>Resolves an access token from <code>auth</code> or stored tokens. Accepts <code>accessToken</code>, or <code>refreshToken</code> plus client details.</li>
+<li><code>excelAppendRow({ driveId, itemId?, path?, link?, table, values?, row?, auth, debug? })</code></li>
+<li>Appends a row to an Excel table. <code>values</code> is an array row; <code>row</code> can map by column name or letter.</li>
+</ul>
+<p>Configuration:</p>
+<ul>
+<li>No required or optional <code>env</code> keys are defined in <code>env.json</code>.</li>
+<li>Pass credentials and target IDs via function arguments.</li>
+</ul>
+<p>Examples:</p>
+<pre class="code"><code>
+const sp = require(&#x27;sharepoint@latest&#x27;);
+
+const token = await sp.ensureAccessToken({
+  refreshToken,
+  clientId,
+  clientSecret,
+  tenant: &#x27;common&#x27;
+});
+
+await sp.uploadSmall({
+  siteId: &#x27;site-id&#x27;,
+  driveId: &#x27;drive-id&#x27;,
+  drivePath: &#x27;Invoices&#x27;,
+  filename: &#x27;invoice.pdf&#x27;,
+  path: &#x27;mail/123/invoice.pdf&#x27;,
+  accessToken: token,
+  contentType: &#x27;application/pdf&#x27;
+});
+</code></pre>
+<pre class="code"><code>
+const sp = require(&#x27;sharepoint@latest&#x27;);
+
+await sp.excelAppendRow({
+  driveId: &#x27;drive-id&#x27;,
+  path: &#x27;/Documents/Book.xlsx&#x27;,
+  table: &#x27;Table1&#x27;,
+  row: { A: &#x27;2024-01-01&#x27;, B: &#x27;Acme&#x27;, C: &#x27;120.00&#x27; },
+  auth: { accessToken }
+});
+</code></pre>
+      </div>
+      
+    </main>
+  </body>
+</html>
